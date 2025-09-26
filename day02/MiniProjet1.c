@@ -71,7 +71,7 @@ int main(){
 				for(i=0; i<n ; i++){
 					var = 1;
 					j=0;
-					while(temp_titre[j] != '\0' && titre[i][j] != '\0'){
+					while(temp_titre[j] != '\0' || titre[i][j] != '\0'){
 						if(temp_titre[j] != titre[i][j] && temp_titre[j] != (titre[i][j]+32) && (temp_titre[j]+32) != titre[i][j]){
 							var = 0;
 							break;
@@ -91,7 +91,7 @@ int main(){
 				for(i = 0; i < n ; i++){
 					var = 1;
 					j=0;
-					while(temp_titre[j] != '\0' && titre[i][j] != '\0'){
+					while(temp_titre[j] != '\0' || titre[i][j] != '\0'){
 						if(temp_titre[j] != titre[i][j] && temp_titre[j] != (titre[i][j]+32) && (temp_titre[j]+32) != titre[i][j]){
 							var = 0;
 							break;
@@ -132,7 +132,7 @@ int main(){
 					}
 					printf("la suppression est effectuee avec succes!\n");
 				}else
-					printf("le livre qui vou voulez suppremer n'exist pas");
+					printf("le livre qui vou voulez suppremer n'exist pas\n");
 				break;
 			case 6 ://Afficher le nombre total de livres en stock
 				nbrtotal = 0;
