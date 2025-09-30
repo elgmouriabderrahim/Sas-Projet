@@ -12,7 +12,7 @@ struct contact{
 typedef struct contact contact;
 contact temp_contact;
 int menu(){
-	int choix;
+	int choix = -1;
 	printf("1- pour Ajouter un contact\n");
 	printf("2- pour modifier un contact\n");
 	printf("3- pour Supprimer un contact\n");
@@ -21,13 +21,18 @@ int menu(){
 	printf("0- pour quiter\n");
 	printf("votre choix :");
 	scanf("%d",&choix);
+	while(getchar()!= '\n');
 	printf("\n");
 	return choix;
 }
 
 int VerifyNumber(char numero[]){
 		int verify = 1, i;
-		if(numero[0] != '+' && (numero[0] < '0' || numero[0] > '9')){
+		if(strlen(numero)<10){
+			printf("le numero doit contient au moin 10 nombres!\n");
+			verify = 0;
+		}
+		else if(numero[0] != '+' && (numero[0] < '0' || numero[0] > '9')){
 			printf("le numero est invalide, renterer le numero!\n");
 			verify = 0;
 		} else{
@@ -45,26 +50,44 @@ int VerifyNumber(char numero[]){
 }
 
 int VerifyEmail(char email[]){
-	int point = 0, arobas = 0, verify = 1, i = 0;
+		int point = 0, arobas = 0, verify = 1, i = 0;
 		while(email[i] != '\0'){
-				if(email[i] == '.')
-					point++;
-				if(email[i] == '@')
-					arobas++;
-				i++;	
+					if(email[i] == '@'){
+						arobas = 1;
+						i++;
+						if(email[i] == '.'){
+							verify = 0;
+							break;
+						}
+						while(email[i] != '\0'){
+							if(email[i] == '.')
+								point = i;
+							if(email[i] == '@'){
+								verify = 0;
+								break;
+							}
+							i++;
+						}
+						if( point == 0 || (strlen(email)-1-point) != 2 && (strlen(email)-1-point) != 3 ){
+									verify = 0;
+									break;
+						}
+						break;
+					}
+					i++;
 		}
-		if(point < 1 || arobas != 1){
-			printf("l'email doit etre contient au moin un . et une @\n");
+		if(arobas == 0)
 			verify = 0;
-		}
+		if(verify == 0)
+			printf("invalid email!\n");
 		return verify;
 }
+
 
 void AjouterContact(contact contacts[],int nbrcontacts){
 	int i ,verify;
 	printf("entrer les info du contact.\n");
 	printf("nom : ");
-	getchar();
 	gets(contacts[nbrcontacts].nom);
 	do{
 		printf("numero : ");
@@ -122,7 +145,6 @@ void ModifierContact(contact contacts[],int nbrcontacts){
 		int verify;
 		char temp_nom[longeurmax];
 		printf("entrer le nom du person a mettre a jour les info :");
-		getchar();
 		gets(temp_nom);
 		int indice = recherche(contacts, nbrcontacts, temp_nom);
 		if(indice != -1){
@@ -150,7 +172,6 @@ int SuppressionContact(contact contacts[],int nbrcontacts){
 		char temp_nom[longeurmax];
 		int i;
 		printf("entrer le nom du contact qui vous voulez supprimer:");
-		getchar();
 		gets(temp_nom);
 		int indice = recherche(contacts, nbrcontacts, temp_nom);\
 		if(indice != -1){
@@ -170,11 +191,19 @@ int SuppressionContact(contact contacts[],int nbrcontacts){
 		
 }
 int main(){
-	contact contacts[nbrcontactsmax];
-	int choix, nbrcontacts=0;
+	contact contacts[nbrcontactsmax]=
+	{
+	{"abderrahim", "0776436843", "elgmouri@gmail.com"},
+	{"mohammed", "0776436542", "mohammed@gmail.com"},
+	{"yassine", "0799999999", "yassine.elg@gmail.com"},
+	{"aya", "+21255667788", "aya.kkk@gmail.com"}
+	};
+	int choix, nbrcontacts=4;
 	do{
 		choix = menu();
 		switch(choix){
+			case 0 :
+				break;
 			case 1: //Ajouter un contact
 				AjouterContact(contacts, nbrcontacts++);
 				break;
@@ -190,8 +219,6 @@ int main(){
 				break;
 			case 5 ://Rechercher un contact
 				RechercherContact(contacts, nbrcontacts);
-				break;
-			case 0 :
 				break;
 			default : printf("entrer une valide choix !\n\n");
 		}
